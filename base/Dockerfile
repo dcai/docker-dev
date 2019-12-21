@@ -14,6 +14,7 @@ RUN ["apt-get", "-y", "update"]
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     apt-transport-https \
     apt-utils \
+    ca-certificates \
     locales \
     software-properties-common \
     wget
@@ -31,10 +32,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
         aptitude \
         aria2 \
         aspell \
-        ca-certificates \
         cmake \
         curl \
-        emacs-nox \
         fish \
         git \
         golang \
@@ -42,19 +41,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
         httpie \
         jq \
         mcrypt \
-        memcached \
-        mosh \
         mycli \
         ncdu \
         ntp \
         ntpdate \
         p7zip \
         pgcli \
-        python-pip \
         python3-pip \
+        python3-pygments \
         python3-tmuxp \
         python3-venv \
-        redis-server \
         ruby \
         ruby-dev \
         silversearcher-ag \
@@ -66,6 +62,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
         unzip \
         vim \
         virtualenv \
+        wajig \
         wget \
         xz-utils
 
