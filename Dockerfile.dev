@@ -1,4 +1,4 @@
-ARG BASE_VERSION=0.0.3
+ARG BASE_VERSION=0.0.4
 FROM dcai/ubuntu-base:${BASE_VERSION}
 
 ENV HOMEDIR=/root
@@ -8,7 +8,7 @@ WORKDIR $HOMEDIR
 
 RUN pwd
 
-COPY init-dotfiles.bash /usr/bin/
+COPY scripts/init-dotfiles.bash /usr/bin/
 RUN chmod +x /usr/bin/init-dotfiles.bash
 
 ENTRYPOINT ["/usr/bin/fish"]

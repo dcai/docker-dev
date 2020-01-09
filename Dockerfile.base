@@ -19,52 +19,49 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     software-properties-common \
     wget
 
-RUN add-apt-repository -y ppa:jonathonf/vim
-RUN add-apt-repository -y ppa:fish-shell/release-3
-RUN add-apt-repository -y ppa:git-core/ppa
-
-RUN ["apt-get", "-y", "update"]
-
 RUN wget https://github.com/BurntSushi/ripgrep/releases/download/${VERSION_RIPGREP}/ripgrep_${VERSION_RIPGREP}_amd64.deb
 RUN dpkg -i ripgrep_${VERSION_RIPGREP}_amd64.deb
 
+RUN add-apt-repository -y ppa:jonathonf/vim
+RUN add-apt-repository -y ppa:fish-shell/release-3
+RUN add-apt-repository -y ppa:git-core/ppa
+RUN ["apt-get", "-y", "update"]
+
+# python layer
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        aptitude \
-        aria2 \
-        aspell \
-        cmake \
-        curl \
-        fish \
-        git \
-        golang \
-        htop \
-        httpie \
-        jq \
-        mcrypt \
-        mycli \
-        ncdu \
-        ntp \
-        ntpdate \
-        p7zip \
-        pgcli \
-        python3-pip \
-        python3-pygments \
-        python3-tmuxp \
-        python3-venv \
-        ruby \
-        ruby-dev \
-        silversearcher-ag \
-        tig \
-        tmux \
-        tmuxinator \
-        tree \
-        unrar \
-        unzip \
-        vim \
-        virtualenv \
-        wajig \
-        wget \
-        xz-utils
+    python3-pip \
+    python3-pygments \
+    python3-venv \
+    virtualenv
+
+# ruby layer
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    ruby \
+    ruby-dev
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    aptitude \
+    aria2 \
+    aspell \
+    cmake \
+    curl \
+    fish \
+    git \
+    htop \
+    jq \
+    mcrypt \
+    ncdu \
+    ntp \
+    ntpdate \
+    p7zip \
+    silversearcher-ag \
+    tig \
+    tmux \
+    tree \
+    unrar \
+    unzip \
+    vim \
+    wajig
 
 # configure locale
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
