@@ -61,7 +61,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     unrar \
     unzip \
     vim \
-    wajig
+    wajig \
+    wbritish
 
 # configure locale
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
