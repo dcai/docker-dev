@@ -3,10 +3,12 @@ FROM dcai/ubuntu-base:${BASE_VERSION}
 
 ENV HOMEDIR /root
 ENV VERSION_HELM2 "2.13.1"
+ENV VERSION_HELM3 "3.1.2"
 ENV VERSION_KREW "0.3.3"
 ENV VERSION_KUBECTL "1.17.0"
 ENV VERSION_KUBESEC "0.9.2"
 ENV VERSION_EXA "0.9.0"
+ENV VERSION_HELMFILE "0.102.0"
 
 MAINTAINER Dongsheng Cai <d@tux.im>
 WORKDIR $HOMEDIR
@@ -44,20 +46,37 @@ RUN wget -q https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
 RUN chmod +x ./kubens
 RUN mv ./kubens /usr/bin/
 
+# helmfile
+RUN wget -q https://github.com/roboll/helmfile/releases/download/v${VERSION_HELMFILE}/helmfile_linux_amd64
+RUN chmod a+x ./helmfile_linux_amd64
+RUN mv ./helmfile_linux_amd64 /usr/bin/helmfile
+
 # kubesec
 RUN curl -sSL https://github.com/shyiko/kubesec/releases/download/${VERSION_KUBESEC}/kubesec-${VERSION_KUBESEC}-linux-amd64 -o kubesec \
     && chmod a+x kubesec \
     && mv kubesec /usr/bin/
 
+# diff-so-fancy
+RUN wget -q https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
+        && mv diff-so-fancy /usr/bin/ \
+        && chmod a+x /usr/bin/diff-so-fancy
+
 RUN wget -q https://get.helm.sh/helm-v${VERSION_HELM2}-linux-amd64.tar.gz \
-    && tar xzf helm-v${VERSION_HELM2}-linux-amd64.tar.gz \
-    && mv ./linux-amd64/helm /usr/bin/helm2 \
-    && chmod a+x /usr/bin/helm2
+    && tar xzf helm-v${VERSION_HELM2}-linux-amd64.tar.gz
+RUN mv ./linux-amd64/helm /usr/bin/helm
+RUN chmod a+x /usr/bin/helm
+RUN mv ./linux-amd64/tiller /usr/bin/tiller
+RUN chmod a+x /usr/bin/tiller
+
+RUN wget -q https://get.helm.sh/helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
+    && tar xzf helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
+    && mv ./linux-amd64/helm /usr/bin/helm3 \
+    && chmod a+x /usr/bin/helm3
 
 RUN mkdir -p .local/bin
 RUN wget -q https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip \
     && unzip exa-linux-x86_64-${VERSION_EXA}.zip \
-    && mv exa-linux-x86_64 .local/bin/exa
+    && mv exa-linux-x86_64 /usr/bin/exa
 
 COPY scripts/init-dotfiles.bash /usr/bin/
 RUN chmod +x /usr/bin/init-dotfiles.bash
