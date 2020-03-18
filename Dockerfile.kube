@@ -16,8 +16,8 @@ WORKDIR $HOMEDIR
 RUN pwd
 
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-RUN wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
+RUN curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+RUN curl -s https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
 RUN echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 
 RUN ["apt-get", "-y", "update"]
@@ -27,56 +27,50 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     mongodb-org-tools
 
 # kubectl
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v${VERSION_KUBECTL}/bin/linux/amd64/kubectl
+RUN curl --progress-bar -LO https://storage.googleapis.com/kubernetes-release/release/v${VERSION_KUBECTL}/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/bin/kubectl
 
-# krew
-RUN curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/download/v${VERSION_KREW}/krew.{tar.gz,yaml}" && tar zxvf krew.tar.gz
-RUN ./krew-linux_amd64 install --manifest=krew.yaml --archive=krew.tar.gz
-RUN ./krew-linux_amd64 update
-
 # kubectx
-RUN wget -q https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
+RUN curl --progress-bar -LO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
 RUN chmod +x ./kubectx
 RUN mv ./kubectx /usr/bin/
 
 # kubens
-RUN wget -q https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
+RUN curl --progress-bar -LO https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
 RUN chmod +x ./kubens
 RUN mv ./kubens /usr/bin/
 
 # helmfile
-RUN wget -q https://github.com/roboll/helmfile/releases/download/v${VERSION_HELMFILE}/helmfile_linux_amd64
+RUN curl --progress-bar -LO https://github.com/roboll/helmfile/releases/download/v${VERSION_HELMFILE}/helmfile_linux_amd64
 RUN chmod a+x ./helmfile_linux_amd64
 RUN mv ./helmfile_linux_amd64 /usr/bin/helmfile
 
 # kubesec
-RUN curl -sSL https://github.com/shyiko/kubesec/releases/download/${VERSION_KUBESEC}/kubesec-${VERSION_KUBESEC}-linux-amd64 -o kubesec \
+RUN curl --progress-bar -Lo kubesec https://github.com/shyiko/kubesec/releases/download/${VERSION_KUBESEC}/kubesec-${VERSION_KUBESEC}-linux-amd64 \
     && chmod a+x kubesec \
     && mv kubesec /usr/bin/
 
 # diff-so-fancy
-RUN wget -q https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
+RUN curl --progress-bar -LO https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
         && mv diff-so-fancy /usr/bin/ \
         && chmod a+x /usr/bin/diff-so-fancy
 
-RUN wget -q https://get.helm.sh/helm-v${VERSION_HELM2}-linux-amd64.tar.gz \
-    && tar xzf helm-v${VERSION_HELM2}-linux-amd64.tar.gz
+RUN curl --progress-bar -Lo helm2.tar.gz https://get.helm.sh/helm-v${VERSION_HELM2}-linux-amd64.tar.gz \
+    && tar xzf helm2.tar.gz
 RUN mv ./linux-amd64/helm /usr/bin/helm
 RUN chmod a+x /usr/bin/helm
 RUN mv ./linux-amd64/tiller /usr/bin/tiller
 RUN chmod a+x /usr/bin/tiller
 
-RUN wget -q https://get.helm.sh/helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
-    && tar xzf helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
+RUN curl --progress-bar -Lo helm3.tar.gz https://get.helm.sh/helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
+    && tar xzf helm3.tar.gz \
     && mv ./linux-amd64/helm /usr/bin/helm3 \
     && chmod a+x /usr/bin/helm3
 
-RUN mkdir -p .local/bin
-RUN wget -q https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip \
-    && unzip exa-linux-x86_64-${VERSION_EXA}.zip \
-    && mv exa-linux-x86_64 /usr/bin/exa
+RUN curl --progress-bar -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
+RUN unzip exa.zip
+RUN mv exa-linux-x86_64 /usr/bin/exa
 
 COPY scripts/init-dotfiles.bash /usr/bin/
 RUN chmod +x /usr/bin/init-dotfiles.bash
