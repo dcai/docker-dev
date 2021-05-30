@@ -74,7 +74,7 @@ RUN curl --progress-bar -LO https://raw.githubusercontent.com/so-fancy/diff-so-f
         && mv diff-so-fancy /usr/bin/ \
         && chmod a+x /usr/bin/diff-so-fancy
 
-RUN curl --progress-bar -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
+RUN curl --progress-bar -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-v${VERSION_EXA}.zip
 RUN unzip exa.zip
 RUN mv exa-linux-x86_64 /usr/bin/exa
 
