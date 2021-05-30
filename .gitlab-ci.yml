@@ -1,0 +1,35 @@
+stages:
+  - build
+
+services:
+  - docker:stable-dind
+
+build base:
+  when: manual
+  stage: build
+  services:
+    - docker:18-dind
+  image:
+    name: docker
+    # name: "$CI_IMAGE_GCP:v1"
+  allow_failure: false
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+  script:
+    - docker build . -f ./Dockerfile.base -t "dcai/ubuntu-base:latest"
+    - docker push "dcai/ubuntu-base:latest"
+
+build kube:
+  when: manual
+  stage: build
+  services:
+    - docker:18-dind
+  image:
+    name: docker
+    # name: "$CI_IMAGE_GCP:v1"
+  allow_failure: false
+  before_script:
+    - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+  script:
+    - docker build . -f ./Dockerfile.kube -t "dcai/kube:latest"
+    - docker push "dcai/kube:latest"
