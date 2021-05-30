@@ -3,12 +3,11 @@ FROM dcai/ubuntu-base:${BASE_VERSION}
 
 ENV HOMEDIR /root
 ENV VERSION_HELM2 "2.13.1"
-ENV VERSION_HELM3 "3.1.2"
+ENV VERSION_HELM3 "3.6.0"
 ENV VERSION_KREW "0.3.3"
-ENV VERSION_KUBECTL "1.17.0"
+ENV VERSION_KUBECTL "1.21.1"
 ENV VERSION_KUBESEC "0.9.2"
-ENV VERSION_EXA "0.9.0"
-ENV VERSION_HELMFILE "0.102.0"
+ENV VERSION_HELMFILE "0.139.7"
 
 MAINTAINER Dongsheng Cai <d@tux.im>
 WORKDIR $HOMEDIR
@@ -51,28 +50,19 @@ RUN curl --progress-bar -Lo kubesec https://github.com/shyiko/kubesec/releases/d
     && chmod a+x kubesec \
     && mv kubesec /usr/bin/
 
-# diff-so-fancy
-RUN curl --progress-bar -LO https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
-        && mv diff-so-fancy /usr/bin/ \
-        && chmod a+x /usr/bin/diff-so-fancy
-
 RUN curl --progress-bar -Lo helm2.tar.gz https://get.helm.sh/helm-v${VERSION_HELM2}-linux-amd64.tar.gz \
     && tar xzf helm2.tar.gz
 RUN mv ./linux-amd64/helm /usr/bin/helm
-RUN chmod a+x /usr/bin/helm
+RUN chmod a+x /usr/bin/helm2
 RUN mv ./linux-amd64/tiller /usr/bin/tiller
 RUN chmod a+x /usr/bin/tiller
 
 RUN curl --progress-bar -Lo helm3.tar.gz https://get.helm.sh/helm-v${VERSION_HELM3}-linux-amd64.tar.gz \
     && tar xzf helm3.tar.gz \
-    && mv ./linux-amd64/helm /usr/bin/helm3 \
-    && chmod a+x /usr/bin/helm3
-
-RUN curl --progress-bar -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
-RUN unzip exa.zip
-RUN mv exa-linux-x86_64 /usr/bin/exa
+    && mv ./linux-amd64/helm /usr/bin/helm \
+    && chmod a+x /usr/bin/helm
 
 COPY scripts/init-dotfiles.bash /usr/bin/
 RUN chmod +x /usr/bin/init-dotfiles.bash
 
-ENTRYPOINT ["/usr/bin/fish"]
+ENTRYPOINT ["/usr/bin/bash"]
