@@ -15,6 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     apt-transport-https \
     apt-utils \
     ca-certificates \
+    curl \
     locales \
     software-properties-common
 
@@ -44,7 +45,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     aria2 \
     aspell \
     cmake \
-    curl \
     fish \
     git \
     htop \
