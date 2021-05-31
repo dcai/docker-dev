@@ -16,11 +16,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     apt-utils \
     ca-certificates \
     locales \
-    software-properties-common \
-    wget
+    software-properties-common
 
-RUN wget https://github.com/BurntSushi/ripgrep/releases/download/${VERSION_RIPGREP}/ripgrep_${VERSION_RIPGREP}_amd64.deb
-RUN dpkg -i ripgrep_${VERSION_RIPGREP}_amd64.deb
+RUN curl -sL -o rg.deb https://github.com/BurntSushi/ripgrep/releases/download/${VERSION_RIPGREP}/ripgrep_${VERSION_RIPGREP}_amd64.deb
+RUN dpkg -i rg.deb
+RUN rm -f rg.deb
 
 RUN add-apt-repository -y ppa:jonathonf/vim
 RUN add-apt-repository -y ppa:fish-shell/release-3
@@ -70,11 +70,11 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && update-locale LANG=en_US.UTF-8
 
 # diff-so-fancy
-RUN curl --progress-bar -LO https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
+RUN curl -LO https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
         && mv diff-so-fancy /usr/bin/ \
         && chmod a+x /usr/bin/diff-so-fancy
 
-RUN curl --progress-bar -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
+RUN curl -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
 RUN unzip exa.zip
 RUN mv exa-linux-x86_64 /usr/bin/exa
 
