@@ -17,7 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     locales \
     software-properties-common
 
-RUN add-apt-repository ppa:neovim-ppa/stable
+RUN add-apt-repository ppa:neovim-ppa/unstable
 RUN add-apt-repository -y ppa:fish-shell/release-3
 RUN add-apt-repository -y ppa:git-core/ppa
 RUN ["apt-get", "-y", "update"]
@@ -60,3 +60,5 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
 
 ENV LANG en_US.UTF-8
 RUN ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime
+
+ENTRYPOINT ["/usr/bin/fish"]

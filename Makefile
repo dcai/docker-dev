@@ -12,3 +12,6 @@ push-base:
 
 push-kube:
 	docker push dcai/kube:latest
+
+push-dev:
+	docker push dcai/dev:latest
