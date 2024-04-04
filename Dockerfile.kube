@@ -1,5 +1,5 @@
 ARG BASE_VERSION=latest
-FROM dcai/ubuntu-base:${BASE_VERSION}
+FROM dcai/dev:${BASE_VERSION}
 
 ENV HOMEDIR /root
 ENV VERSION_HELM2 "2.13.1"
