@@ -1,9 +1,7 @@
-ARG UBUNTU_VERSION=18.04
+ARG UBUNTU_VERSION=jammy
 FROM ubuntu:${UBUNTU_VERSION}
 
-ENV VERSION_RIPGREP "12.1.1"
 ENV HOMEDIR=/root
-ENV VERSION_EXA "0.9.0"
 
 MAINTAINER Dongsheng Cai <d@tux.im>
 WORKDIR $HOMEDIR
@@ -19,11 +17,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     locales \
     software-properties-common
 
-RUN curl -sL -o rg.deb https://github.com/BurntSushi/ripgrep/releases/download/${VERSION_RIPGREP}/ripgrep_${VERSION_RIPGREP}_amd64.deb
-RUN dpkg -i rg.deb
-RUN rm -f rg.deb
-
-RUN add-apt-repository -y ppa:jonathonf/vim
+RUN add-apt-repository ppa:neovim-ppa/stable
 RUN add-apt-repository -y ppa:fish-shell/release-3
 RUN add-apt-repository -y ppa:git-core/ppa
 RUN ["apt-get", "-y", "update"]
@@ -34,11 +28,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-pygments \
     python3-venv \
     virtualenv
-
-# ruby layer
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    ruby \
-    ruby-dev
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     aptitude \
@@ -51,16 +40,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     jq \
     mcrypt \
     ncdu \
+    neovim \
     ntp \
     ntpdate \
     p7zip \
-    silversearcher-ag \
+    ripgrep \
     tig \
     tmux \
     tree \
     unrar \
     unzip \
-    vim \
     wajig \
     wbritish
 
@@ -68,15 +57,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
     && update-locale LANG=en_US.UTF-8
-
-# diff-so-fancy
-RUN curl -LO https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy \
-        && mv diff-so-fancy /usr/bin/ \
-        && chmod a+x /usr/bin/diff-so-fancy
-
-RUN curl -Lo exa.zip https://github.com/ogham/exa/releases/download/v${VERSION_EXA}/exa-linux-x86_64-${VERSION_EXA}.zip
-RUN unzip exa.zip
-RUN mv exa-linux-x86_64 /usr/bin/exa
 
 ENV LANG en_US.UTF-8
 RUN ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime

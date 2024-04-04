@@ -1,4 +1,4 @@
-ARG BASE_VERSION=0.0.4
+ARG BASE_VERSION=latest
 FROM dcai/ubuntu-base:${BASE_VERSION}
 
 ENV HOMEDIR=/root
