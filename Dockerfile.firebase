@@ -1,0 +1,7 @@
+FROM node:lts-alpine
+
+RUN corepack enable
+RUN corepack prepare pnpm@latest --activate
+RUN npm install -g firebase-tools
+
+RUN apk --no-cache add envsubst
